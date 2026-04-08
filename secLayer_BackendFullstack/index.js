@@ -2,6 +2,7 @@ require('dotenv').config();
 
 const cors = require('cors');
 const express = require('express');
+const path = require('path');
 const conectarDB = require('./src/config/db');
 const authRoutes = require('./src/routes/authRoutes');
 const usuarioRoutes = require('./src/routes/usuarioRoutes');
@@ -28,6 +29,14 @@ app.use('/api/stakeholders', stakeholderRoutes);
 //Ruta de prueba
 app.get('/', (req, res)  => {
     res.send('Servidor express funcionando');
+});
+
+//Servir frontend
+app.use(express.static(path.join(__dirname, 'public')));
+
+//Fallback Angular (MUY IMPORTANTE)
+app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public/index.html'));
 });
 
 const PORT = process.env.PORT || 4000;
