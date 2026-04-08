@@ -10,27 +10,27 @@ import { FormsModule } from '@angular/forms';
   templateUrl: './login.html'
 })
 export class LoginComponent {
-
   email: string = '';
   password: string = '';
 
   constructor(private api: ApiService, private router: Router) {}
 
   login() {
-    const data = {
-      email: this.email,
-      password: this.password
-    };
+    const data = { email: this.email, password: this.password };
 
     this.api.login(data).subscribe({
-      next: (res) => {
-        console.log(res);
+      next: (res: any) => {
+        console.log('Respuesta login:', res);
 
-        // guardar token
-        localStorage.setItem('token', res.token);
+        if (res.token) {
+          // Guardar token en localStorage
+          localStorage.setItem('token', res.token);
 
-        // redirigir al dashboard
-        this.router.navigate(['/']);
+          // Redirigir al dashboard / tabla de usuarios
+          this.router.navigate(['/usuarios']);
+        } else {
+          alert('No se recibió token del servidor');
+        }
       },
       error: (err) => {
         console.error('Error login', err);
