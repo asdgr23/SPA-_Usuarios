@@ -6,7 +6,7 @@ import { Observable} from 'rxjs';
   providedIn: 'root',
 })
 export class ApiService {
-  private API_URL = 'https://spa-usuarios.onrender.com/';
+  private API_URL = 'https://spa-usuarios.onrender.com/api';
 
   constructor(private http: HttpClient){}
 

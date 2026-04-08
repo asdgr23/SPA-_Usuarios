@@ -35,8 +35,8 @@ app.get('/', (req, res)  => {
 app.use(express.static(path.join(__dirname, 'public')));
 
 //Fallback Angular (MUY IMPORTANTE)
-app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, 'public/index.html'));
+app.use((req, res) => {
+  res.status(404).json({ msg: 'Ruta no encontrada' });
 });
 
 const PORT = process.env.PORT || 4000;
