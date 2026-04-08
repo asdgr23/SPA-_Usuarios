@@ -4,6 +4,7 @@ const cors = require('cors');
 const express = require('express');
 const path = require('path');
 const conectarDB = require('./src/config/db');
+
 const authRoutes = require('./src/routes/authRoutes');
 const usuarioRoutes = require('./src/routes/usuarioRoutes');
 const productosRoutes = require('./src/routes/productosRoutes');
@@ -11,41 +12,41 @@ const stakeholderRoutes = require('./src/routes/stakeholderRoutes');
 
 const app = express();
 
-//Conectar base de datos
+// Conectar base de datos
 conectarDB();
 
-//Middleware para leer JSON
+// Middleware
 app.use(express.json());
 
-//Middleware CORS
-app.use(cors());
+app.use(cors({
+  origin: '*', // puedes restringir luego si quieres
+}));
 
-//Registrar rutas
+// Rutas API
 app.use('/api/auth', authRoutes);
 app.use('/api/usuarios', usuarioRoutes);
 app.use('/api/productos', productosRoutes);
 app.use('/api/stakeholders', stakeholderRoutes);
 
-//Ruta de prueba
-app.get('/', (req, res)  => {
-    res.send('Servidor express funcionando');
+//  Ruta de prueba
+app.get('/api', (req, res) => {
+  res.send('API funcionando correctamente');
 });
 
-//Servir frontend
-app.use(express.static(path.join(__dirname, 'public')));
+// (opcional) eliminar si no usas frontend dentro del backend
+// app.use(express.static(path.join(__dirname, 'public')));
 
-//Fallback Angular (MUY IMPORTANTE)
+// Fallback (IMPORTANTE que sea lo último)
 app.use((req, res) => {
   res.status(404).json({ msg: 'Ruta no encontrada' });
 });
 
+// Puerto dinámico para Render
 const PORT = process.env.PORT || 4000;
 
 app.listen(PORT, () => {
-    console.log (`Servidor corriendo en
-        http://localhost:${PORT}`);
+  console.log(`Servidor corriendo en puerto ${PORT}`);
 });
-
 
 
 
