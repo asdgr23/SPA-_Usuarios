@@ -2,7 +2,6 @@ require('dotenv').config();
 
 const cors = require('cors');
 const express = require('express');
-const path = require('path');
 const conectarDB = require('./src/config/db');
 
 const authRoutes = require('./src/routes/authRoutes');
@@ -18,9 +17,8 @@ conectarDB();
 // Middleware
 app.use(express.json());
 
-app.use(cors({
-  origin: '*', // puedes restringir luego si quieres
-}));
+// CORS (permitir todo temporalmente, puedes restringir luego)
+app.use(cors());
 
 // Rutas API
 app.use('/api/auth', authRoutes);
@@ -28,25 +26,19 @@ app.use('/api/usuarios', usuarioRoutes);
 app.use('/api/productos', productosRoutes);
 app.use('/api/stakeholders', stakeholderRoutes);
 
-//  Ruta de prueba
-app.get('/api', (req, res) => {
-  res.send('API funcionando correctamente');
+// 🔹 Ruta de prueba para verificar que backend levantó
+app.get('/api/test', (req, res) => {
+    res.json({ ok: true, mensaje: 'Backend funcionando 🚀' });
 });
 
-// (opcional) eliminar si no usas frontend dentro del backend
-// app.use(express.static(path.join(__dirname, 'public')));
-
-// Fallback (IMPORTANTE que sea lo último)
+// Fallback para cualquier ruta que no exista
 app.use((req, res) => {
-  res.status(404).json({ msg: 'Ruta no encontrada' });
+    res.status(404).json({ msg: 'Ruta no encontrada' });
 });
 
 // Puerto dinámico para Render
 const PORT = process.env.PORT || 4000;
 
 app.listen(PORT, () => {
-  console.log(`Servidor corriendo en puerto ${PORT}`);
+    console.log(`Servidor corriendo en puerto ${PORT}`);
 });
-
-
-
